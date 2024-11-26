@@ -11,10 +11,11 @@ import OpenAI from 'openai';
     existingTags;
 
   const SUBMISSION_BLOCK_DELAY = 10,
-    API_ENDPOINT = 'https://pinboard-api.herokuapp.com/',
+    API_ENDPOINT = 'https://eloquent-fenglisu-ae6d4c.netlify.app/.netlify/functions/pinboard-bridge/',
     TAG_DOWNLOAD_DELAY = 10000, // 10 seconds
     SUBMISSION_REQUEST_TIMEOUT = 25000, // 25 seconds
     GPT_TEMPERATURE = 0.4;
+  
 
   $(function() {
     resize_window();
