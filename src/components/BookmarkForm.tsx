@@ -191,6 +191,15 @@ function BookmarkForm() {
   }, [formData.private]);
 
   useEffect(() => {
+    if (shouldAutoFocusTags) {
+      requestAnimationFrame(() => {
+        const input = document.getElementById('tag-input-field');
+        input?.focus({ preventScroll: true });
+      });
+    }
+  }, [shouldAutoFocusTags]);
+
+  useEffect(() => {
     const formEl = formRef.current;
     if (!formEl) return undefined;
 
@@ -407,7 +416,6 @@ function BookmarkForm() {
         value={formData.tags}
         onChange={handleTagsChange}
         tabIndex={6}
-        autoFocus={shouldAutoFocusTags}
       />
       <TagSuggestions
         suggestions={suggestions}
