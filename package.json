@@ -19,7 +19,7 @@
     "url": "git@github.com:rossshannon/pincushion.git"
   },
   "engines": {
-    "node": ">=18.20.0",
+    "node": ">=20.0.0",
     "npm": ">=10.0.0"
   },
   "dependencies": {
@@ -92,6 +92,7 @@
   },
   "overrides": {
     "underscore": ">=1.13.8",
+    "serialize-javascript": ">=7.0.5",
     "nth-check": "^2.0.1",
     "postcss": ">=8.4.31",
     "ejs": ">=3.1.10"
