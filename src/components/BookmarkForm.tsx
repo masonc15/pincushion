@@ -191,13 +191,13 @@ function BookmarkForm() {
   }, [formData.private]);
 
   useEffect(() => {
-    if (shouldAutoFocusTags) {
+    if (shouldAutoFocusTags && status !== 'error') {
       requestAnimationFrame(() => {
         const input = document.getElementById('tag-input-field');
         input?.focus({ preventScroll: true });
       });
     }
-  }, [shouldAutoFocusTags]);
+  }, [shouldAutoFocusTags, status]);
 
   useEffect(() => {
     const formEl = formRef.current;
