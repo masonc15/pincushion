@@ -3,10 +3,6 @@
 
 import { vi } from 'vitest';
 
-vi.mock('openai', () => vi.fn(() => ({
-  chat: { completions: { create: vi.fn() } },
-})));
-
 vi.mock('./redux/tagSlice', async () => {
   const actual = await vi.importActual('./redux/tagSlice');
   const defaultSuggestedThunk = () => (dispatch) => {

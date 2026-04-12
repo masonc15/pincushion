@@ -1,14 +1,16 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
     react({
       // Allow JSX in .js files (CRA-style) for tests that still use .js
       include: /\.(js|jsx|ts|tsx)$/,
     }),
   ],
-  base: '/pincushion/',
+  // Production builds are served from GitHub Pages at /pincushion/.
+  // Dev server uses root so `npm start` opens at http://localhost:5173/.
+  base: command === 'build' ? '/pincushion/' : '/',
   build: {
     outDir: 'build',
     sourcemap: true,
@@ -38,4 +40,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

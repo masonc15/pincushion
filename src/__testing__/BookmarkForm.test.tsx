@@ -4,9 +4,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
-vi.mock('openai', () => vi.fn(() => ({
-  chat: { completions: { create: vi.fn() } },
-})));
 
 import BookmarkForm from '../components/BookmarkForm';
 import { setFormData } from '../redux/bookmarkSlice';
