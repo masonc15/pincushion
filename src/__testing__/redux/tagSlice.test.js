@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import axios from 'axios';
 import tagReducer, {
   addSuggestedTag,
@@ -13,12 +14,12 @@ import { cleanUrl } from '../../utils/url';
 import { fetchGptTagSuggestions } from '../../services/gptSuggestions.ts';
 
 // Mock axios
-jest.mock('axios');
+vi.mock('axios');
 const mockedAxios = axios;
 
-jest.mock('../../services/gptSuggestions', () => ({
-  fetchGptTagSuggestions: jest.fn(),
-  filterRecentTagsForRelevance: jest.fn().mockResolvedValue([]),
+vi.mock('../../services/gptSuggestions', () => ({
+  fetchGptTagSuggestions: vi.fn(),
+  filterRecentTagsForRelevance: vi.fn().mockResolvedValue([]),
 }));
 
 // Mock localStorage
@@ -45,8 +46,8 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 // Mock cleanUrl
-jest.mock('../../utils/url', () => ({
-  cleanUrl: jest.fn((url) => url),
+vi.mock('../../utils/url', () => ({
+  cleanUrl: vi.fn((url) => url),
 }));
 
 // Helper to create a mock store
@@ -88,7 +89,7 @@ describe('tag slice', () => {
     // Clear mocks before each test
     localStorageMock.clear();
     mockedAxios.get.mockClear();
-    jest.clearAllMocks(); // Clears all mocks including cleanUrl
+    vi.clearAllMocks(); // Clears all mocks including cleanUrl
     fetchGptTagSuggestions.mockReset();
   });
 

@@ -1,10 +1,11 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
-jest.mock('openai', () => jest.fn(() => ({
-  chat: { completions: { create: jest.fn() } },
+vi.mock('openai', () => vi.fn(() => ({
+  chat: { completions: { create: vi.fn() } },
 })));
 
 import BookmarkForm from '../components/BookmarkForm';
@@ -52,7 +53,7 @@ describe('BookmarkForm Component', () => {
       },
     };
     store = mockStore(initialState);
-    store.dispatch = jest.fn();
+    store.dispatch = vi.fn();
   });
 
   test('handles URL hash removal correctly', () => {
@@ -80,7 +81,7 @@ describe('BookmarkForm Component', () => {
     // A more robust approach might involve creating a new state object based on the old one.
     initialState.bookmark.formData.url = testUrlWithHash;
     store = mockStore(initialState); // Create a *new* store instance with the updated state
-    store.dispatch = jest.fn(); // Re-assign mock dispatch for the new store instance
+    store.dispatch = vi.fn(); // Re-assign mock dispatch for the new store instance
 
     // Rerender with the new store instance
     rerender(

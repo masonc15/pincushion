@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { fetchGptTagSuggestions } from '../gptSuggestions.ts';
 
 const buildFetchResponse = (choices) => ({
@@ -14,7 +15,7 @@ const buildErrorResponse = (status, statusText, body) => ({
   text: () => Promise.resolve(body),
 });
 
-const mockFetch = jest.fn();
+const mockFetch = vi.fn();
 const originalFetch = globalThis.fetch;
 
 beforeEach(() => {
@@ -24,7 +25,7 @@ beforeEach(() => {
 
 afterEach(() => {
   globalThis.fetch = originalFetch;
-  jest.useRealTimers();
+  vi.useRealTimers();
 });
 
 describe('fetchGptTagSuggestions', () => {

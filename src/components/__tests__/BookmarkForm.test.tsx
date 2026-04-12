@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import React from 'react';
 import {
   render,
@@ -10,18 +11,18 @@ import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-jest.mock('openai', () => jest.fn(() => ({
-  chat: { completions: { create: jest.fn() } },
+vi.mock('openai', () => vi.fn(() => ({
+  chat: { completions: { create: vi.fn() } },
 })));
 
-jest.mock('../../utils/popupAffordances', () => ({
-  isLikelyTouchDevice: jest.fn(() => false),
+vi.mock('../../utils/popupAffordances', () => ({
+  isLikelyTouchDevice: vi.fn(() => false),
 }));
 import BookmarkForm, { __TEST_MIN_SPINNER_DURATION } from '../BookmarkForm';
 import * as Ladda from 'ladda';
 import { isLikelyTouchDevice } from '../../utils/popupAffordances';
 
-jest.mock('react-transition-group', () => {
+vi.mock('react-transition-group', () => {
   const Noop = ({ children }) => (typeof children === 'function' ? children(null) : children);
   return {
     CSSTransition: Noop,
@@ -29,7 +30,7 @@ jest.mock('react-transition-group', () => {
   };
 });
 
-jest.mock('ladda');
+vi.mock('ladda');
 
 const mockStore = configureStore([thunk]);
 const baseTagsState = {
@@ -144,7 +145,7 @@ describe('BookmarkForm Component', () => {
     if (!window.scrollTo) {
       window.scrollTo = () => undefined;
     }
-    const scrollSpy = jest
+    const scrollSpy = vi
       .spyOn(window, 'scrollTo')
       .mockImplementation(() => undefined);
     render(
@@ -190,8 +191,8 @@ describe('BookmarkForm Component', () => {
   });
 
   test('spinner remains visible for minimum duration', async () => {
-    jest.useFakeTimers();
-    const spinnerMock = { start: jest.fn(), stop: jest.fn() };
+    vi.useFakeTimers();
+    const spinnerMock = { start: vi.fn(), stop: vi.fn() };
     Ladda.create.mockReturnValue(spinnerMock);
 
     const baseBookmarkState = {
@@ -240,10 +241,10 @@ describe('BookmarkForm Component', () => {
     expect(spinnerMock.stop).not.toHaveBeenCalled();
 
     act(() => {
-      jest.advanceTimersByTime(__TEST_MIN_SPINNER_DURATION);
+      vi.advanceTimersByTime(__TEST_MIN_SPINNER_DURATION);
     });
     expect(spinnerMock.stop).toHaveBeenCalledTimes(1);
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('shows update button text when bookmark already exists', async () => {
@@ -881,7 +882,7 @@ describe('BookmarkForm Component', () => {
   });
 
   test('soft clears status after error animation completes', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     store = mockStore({
       bookmark: {
         formData: {
@@ -918,10 +919,10 @@ describe('BookmarkForm Component', () => {
     });
 
     act(() => {
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
     });
     const actions = store.getActions();
     expect(actions).toContainEqual({ type: 'bookmark/clearStatus' });
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 });

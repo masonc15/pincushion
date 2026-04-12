@@ -1,9 +1,10 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import VirtualizedMenuList from '../VirtualizedMenuList';
 
 // Mock react-window's FixedSizeList
-jest.mock('react-window', () => ({
+vi.mock('react-window', () => ({
   FixedSizeList: ({ children: Row, itemCount, itemData, height }) => {
     const items = [];
     for (let i = 0; i < itemCount; i++) {

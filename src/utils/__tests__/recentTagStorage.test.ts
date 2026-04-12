@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import {
   getRecentTags,
   addRecentTags,
@@ -10,12 +11,12 @@ const { STORAGE_KEY, TTL_MS, cleanExpiredEntries, safeParse } = _internals;
 describe('recentTagStorage', () => {
   beforeEach(() => {
     localStorage.clear();
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date('2024-01-15T12:00:00Z'));
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2024-01-15T12:00:00Z'));
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   describe('safeParse', () => {
@@ -223,11 +224,11 @@ describe('recentTagStorage', () => {
       expect(getRecentTags()).toEqual(['tag1']);
 
       // Advance time by 29 minutes - should still be there
-      jest.advanceTimersByTime(29 * 60 * 1000);
+      vi.advanceTimersByTime(29 * 60 * 1000);
       expect(getRecentTags()).toEqual(['tag1']);
 
       // Advance time by 2 more minutes (31 total) - should be expired
-      jest.advanceTimersByTime(2 * 60 * 1000);
+      vi.advanceTimersByTime(2 * 60 * 1000);
       expect(getRecentTags()).toEqual([]);
     });
   });

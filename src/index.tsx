@@ -8,6 +8,9 @@ import 'ladda/dist/ladda.min.css';
 import './styles/popup.css';
 
 const container = document.getElementById('root');
+if (!container) {
+  throw new Error('Root element #root not found');
+}
 const root = createRoot(container);
 root.render(
   <Provider store={store}>

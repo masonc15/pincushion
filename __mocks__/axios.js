@@ -1,22 +1,24 @@
+import { vi } from 'vitest';
+
 const mockAxios = {
-  get: jest.fn(() => Promise.resolve({ data: {} })),
-  post: jest.fn(() => Promise.resolve({ data: {} })),
-  put: jest.fn(() => Promise.resolve({ data: {} })),
-  delete: jest.fn(() => Promise.resolve({ data: {} })),
-  head: jest.fn(() => Promise.resolve({ data: {} })),
-  patch: jest.fn(() => Promise.resolve({ data: {} })),
-  request: jest.fn(() => Promise.resolve({ data: {} })),
-  create: jest.fn(() => mockAxios),
+  get: vi.fn(() => Promise.resolve({ data: {} })),
+  post: vi.fn(() => Promise.resolve({ data: {} })),
+  put: vi.fn(() => Promise.resolve({ data: {} })),
+  delete: vi.fn(() => Promise.resolve({ data: {} })),
+  head: vi.fn(() => Promise.resolve({ data: {} })),
+  patch: vi.fn(() => Promise.resolve({ data: {} })),
+  request: vi.fn(() => Promise.resolve({ data: {} })),
+  create: vi.fn(() => mockAxios),
   CancelToken: {
-    source: jest.fn(() => ({ token: 'token', cancel: jest.fn() })),
+    source: vi.fn(() => ({ token: 'token', cancel: vi.fn() })),
   },
   defaults: { headers: { common: {} } },
-  isAxiosError: jest.fn((error) => !!(error && error.isAxiosError)),
+  isAxiosError: vi.fn((error) => !!(error && error.isAxiosError)),
 };
 
 mockAxios.interceptors = {
-  request: { use: jest.fn(), eject: jest.fn() },
-  response: { use: jest.fn(), eject: jest.fn() },
+  request: { use: vi.fn(), eject: vi.fn() },
+  response: { use: vi.fn(), eject: vi.fn() },
 };
 
 export default mockAxios;

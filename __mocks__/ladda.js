@@ -1,18 +1,15 @@
-const create = jest.fn(() => ({
-  start: jest.fn(),
-  stop: jest.fn(),
-}));
-const stopAll = jest.fn();
-const bind = jest.fn();
+import { vi } from 'vitest';
 
-module.exports = {
-  __esModule: true,
+const create = vi.fn(() => ({
+  start: vi.fn(),
+  stop: vi.fn(),
+}));
+const stopAll = vi.fn();
+const bind = vi.fn();
+
+export { create, stopAll, bind };
+export default {
   create,
   stopAll,
   bind,
-  default: {
-    create,
-    stopAll,
-    bind,
-  },
 };

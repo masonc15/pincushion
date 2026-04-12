@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 
-jest.mock('openai', () => jest.fn(() => ({
-  chat: { completions: { create: jest.fn() } },
+import { vi } from 'vitest';
+
+vi.mock('openai', () => vi.fn(() => ({
+  chat: { completions: { create: vi.fn() } },
 })));
 
-jest.mock('./redux/tagSlice', () => {
-  const actual = jest.requireActual('./redux/tagSlice');
+vi.mock('./redux/tagSlice', async () => {
+  const actual = await vi.importActual('./redux/tagSlice');
   const defaultSuggestedThunk = () => (dispatch) => {
     dispatch({ type: 'tags/fetchSuggested/pending' });
     dispatch({
@@ -23,9 +25,9 @@ jest.mock('./redux/tagSlice', () => {
     __esModule: true,
     ...actual,
     default: actual.default,
-    fetchTags: jest.fn(() => () => undefined),
-    fetchSuggestedTags: jest.fn(defaultSuggestedThunk),
-    fetchGptSuggestions: jest.fn((payload) => (dispatch) => {
+    fetchTags: vi.fn(() => () => undefined),
+    fetchSuggestedTags: vi.fn(defaultSuggestedThunk),
+    fetchGptSuggestions: vi.fn((payload) => (dispatch) => {
       dispatch({
         type: 'tags/fetchGptSuggestions/fulfilled',
         payload: { suggestions: [], contextKey: payload.contextKey },
@@ -34,13 +36,13 @@ jest.mock('./redux/tagSlice', () => {
   };
 });
 
-jest.mock('./redux/bookmarkSlice', () => {
-  const actual = jest.requireActual('./redux/bookmarkSlice');
+vi.mock('./redux/bookmarkSlice', async () => {
+  const actual = await vi.importActual('./redux/bookmarkSlice');
   return {
     __esModule: true,
     ...actual,
     default: actual.default,
-    fetchBookmarkDetails: jest.fn(() => () => undefined),
+    fetchBookmarkDetails: vi.fn(() => () => undefined),
   };
 });
 
@@ -57,13 +59,13 @@ import { fetchGptSuggestions, fetchSuggestedTags } from './redux/tagSlice';
 import { setAuth } from './redux/authSlice';
 import { persistStoredCredentials } from './utils/credentialStorage';
 
-const fetchGptSuggestionsMock = fetchGptSuggestions as jest.MockedFunction<
+const fetchGptSuggestionsMock = fetchGptSuggestions as vi.MockedFunction<
   typeof fetchGptSuggestions
 >;
-const fetchSuggestedTagsMock = fetchSuggestedTags as jest.MockedFunction<
+const fetchSuggestedTagsMock = fetchSuggestedTags as vi.MockedFunction<
   typeof fetchSuggestedTags
 >;
-const fetchBookmarkDetailsMock = fetchBookmarkDetails as jest.MockedFunction<
+const fetchBookmarkDetailsMock = fetchBookmarkDetails as vi.MockedFunction<
   typeof fetchBookmarkDetails
 >;
 
@@ -231,7 +233,7 @@ describe('App GPT integration', () => {
   });
 
   it('binds Escape key to window.close', async () => {
-    const closeSpy = jest.spyOn(window, 'close').mockImplementation(() => undefined);
+    const closeSpy = vi.spyOn(window, 'close').mockImplementation(() => undefined);
     seedCredentials();
     pushSearch('');
     renderWithStore();
@@ -241,13 +243,13 @@ describe('App GPT integration', () => {
   });
 
   it('passes the existing tags snapshot into GPT context', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     try {
       seedCredentials({ openAiToken: '' });
       pushSearch('?url=https%3A%2F%2Fexample.com');
       const { store } = renderWithStore();
       await act(async () => {
-        jest.advanceTimersByTime(600);
+        vi.advanceTimersByTime(600);
       });
       act(() => {
         store.dispatch(
@@ -269,7 +271,7 @@ describe('App GPT integration', () => {
       const context = fetchGptSuggestionsMock.mock.calls[0][0].context;
       expect(context.existingTags).toBe('Alpha Tag beta-tag');
     } finally {
-      jest.useRealTimers();
+      vi.useRealTimers();
     }
   });
 });

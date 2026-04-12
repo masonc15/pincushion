@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import {
   enforceMinimumPopupSize,
   isLikelyTouchDevice,
@@ -7,7 +8,7 @@ import {
 
 describe('popup affordances helpers', () => {
   it('resizes when window is below minimum dimensions', () => {
-    const mockResize = jest.fn();
+    const mockResize = vi.fn();
     const result = enforceMinimumPopupSize({
       outerWidth: MIN_POPUP_WIDTH - 100,
       outerHeight: MIN_POPUP_HEIGHT - 200,
@@ -18,7 +19,7 @@ describe('popup affordances helpers', () => {
   });
 
   it('skips resizing when already large enough', () => {
-    const mockResize = jest.fn();
+    const mockResize = vi.fn();
     const result = enforceMinimumPopupSize({
       outerWidth: MIN_POPUP_WIDTH + 50,
       outerHeight: MIN_POPUP_HEIGHT + 50,

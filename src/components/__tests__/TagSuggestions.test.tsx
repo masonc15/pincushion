@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -8,7 +9,7 @@ describe('TagSuggestions (presentational)', () => {
     suggestions: ['tag1', '$separator', 'tag2'],
     isLoading: false,
     isEmpty: false,
-    onSuggestionClick: jest.fn(),
+    onSuggestionClick: vi.fn(),
   };
 
   beforeEach(() => {

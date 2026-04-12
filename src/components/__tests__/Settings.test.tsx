@@ -1,17 +1,17 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Settings, { type SettingsFormValues } from '../Settings';
 
-jest.mock('../../services/credentialValidation', () => ({
-  verifyPinboardCredentials: jest.fn(() => Promise.resolve()),
-  verifyOpenAiToken: jest.fn(() => Promise.resolve()),
+vi.mock('../../services/credentialValidation', () => ({
+  verifyPinboardCredentials: vi.fn(() => Promise.resolve()),
+  verifyOpenAiToken: vi.fn(() => Promise.resolve()),
 }));
 
-const { verifyPinboardCredentials, verifyOpenAiToken } =
-  jest.requireMock('../../services/credentialValidation');
+import { verifyPinboardCredentials, verifyOpenAiToken } from '../../services/credentialValidation';
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 const renderSettings = (initialValues?: Partial<SettingsFormValues>) =>
@@ -23,8 +23,8 @@ const renderSettings = (initialValues?: Partial<SettingsFormValues>) =>
         openAiToken: '',
         ...initialValues,
       }}
-      onSave={jest.fn()}
-      onCancel={jest.fn()}
+      onSave={vi.fn()}
+      onCancel={vi.fn()}
     />
   );
 
@@ -38,7 +38,7 @@ describe('Settings form', () => {
   });
 
   it('submits trimmed values after validators succeed', async () => {
-    const onSave = jest.fn();
+    const onSave = vi.fn();
     render(
       <Settings
         initialValues={{
@@ -47,7 +47,7 @@ describe('Settings form', () => {
           openAiToken: '  sk-test  ',
         }}
         onSave={onSave}
-        onCancel={jest.fn()}
+        onCancel={vi.fn()}
       />
     );
 

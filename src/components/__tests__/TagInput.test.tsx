@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -16,7 +17,7 @@ const mockUserTags = {
 };
 
 describe('TagInput Component', () => {
-  const mockOnChange = jest.fn();
+  const mockOnChange = vi.fn();
   const partitionTags = {
     react: 20,
     reactor: 15,

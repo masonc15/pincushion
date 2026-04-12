@@ -1,27 +1,28 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
-jest.mock('openai', () => jest.fn(() => ({
-  chat: { completions: { create: jest.fn() } },
+vi.mock('openai', () => vi.fn(() => ({
+  chat: { completions: { create: vi.fn() } },
 })));
 
 import App from '../App';
 
-jest.mock('../redux/bookmarkSlice', () => {
-  const actual = jest.requireActual('../redux/bookmarkSlice');
+vi.mock('../redux/bookmarkSlice', async () => {
+  const actual = await vi.importActual('../redux/bookmarkSlice');
   return {
     ...actual,
-    fetchBookmarkDetails: jest.fn(() => ({ type: 'bookmark/fetchDetails' })),
+    fetchBookmarkDetails: vi.fn(() => ({ type: 'bookmark/fetchDetails' })),
   };
 });
 
-jest.mock('../redux/tagSlice', () => {
-  const actual = jest.requireActual('../redux/tagSlice');
+vi.mock('../redux/tagSlice', async () => {
+  const actual = await vi.importActual('../redux/tagSlice');
   return {
     ...actual,
-    fetchTags: jest.fn(() => ({ type: 'tags/fetchTags' })),
-    fetchSuggestedTags: jest.fn(() => ({ type: 'tags/fetchSuggested' })),
+    fetchTags: vi.fn(() => ({ type: 'tags/fetchTags' })),
+    fetchSuggestedTags: vi.fn(() => ({ type: 'tags/fetchSuggested' })),
   };
 });
 
@@ -136,7 +137,7 @@ describe('App Component', () => {
     };
 
     beforeEach(() => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       window.localStorage.clear();
     });
 
@@ -151,8 +152,8 @@ describe('App Component', () => {
     };
 
     afterEach(() => {
-      jest.runOnlyPendingTimers();
-      jest.useRealTimers();
+      vi.runOnlyPendingTimers();
+      vi.useRealTimers();
       window.localStorage.clear();
       window.history.replaceState({}, '', '/');
     });
@@ -183,7 +184,7 @@ describe('App Component', () => {
       ).toHaveLength(0);
 
       act(() => {
-        jest.advanceTimersByTime(10000);
+        vi.advanceTimersByTime(10000);
       });
 
       expect(
@@ -213,7 +214,7 @@ describe('App Component', () => {
       expect(immediateFetches).toHaveLength(1);
 
       act(() => {
-        jest.advanceTimersByTime(10000);
+        vi.advanceTimersByTime(10000);
       });
 
       expect(

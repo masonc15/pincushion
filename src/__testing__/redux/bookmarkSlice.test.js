@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import axios from 'axios';
 import bookmarkReducer, {
   setFormData,
@@ -8,7 +9,7 @@ import bookmarkReducer, {
 import { configureStore } from '@reduxjs/toolkit'; // Needed for thunk testing
 
 // Mock axios
-jest.mock('axios');
+vi.mock('axios');
 const mockedAxios = axios;
 
 // Define initialState BEFORE createMockStore uses it

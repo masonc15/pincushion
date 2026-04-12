@@ -1,11 +1,12 @@
+import { vi } from 'vitest';
 import { verifyOpenAiToken } from '../credentialValidation';
 
 describe('verifyOpenAiToken', () => {
   const originalFetch = globalThis.fetch;
-  let fetchMock: jest.Mock;
+  let fetchMock: vi.Mock;
 
   beforeEach(() => {
-    fetchMock = jest.fn();
+    fetchMock = vi.fn();
     globalThis.fetch = fetchMock as unknown as typeof fetch;
   });
 

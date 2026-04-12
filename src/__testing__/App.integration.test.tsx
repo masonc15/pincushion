@@ -1,16 +1,17 @@
+import { vi } from 'vitest';
 import React from 'react';
 import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import axios from 'axios';
-jest.mock('axios');
+vi.mock('axios');
 import App from '../App';
 import authReducer from '../redux/authSlice';
 import bookmarkReducer from '../redux/bookmarkSlice';
 import tagReducer from '../redux/tagSlice';
 import twitterCardReducer from '../redux/twitterCardSlice';
 
-jest.mock('ladda');
+vi.mock('ladda');
 
 const mockedAxios = axios;
 const originalFetch = globalThis.fetch;
@@ -23,7 +24,7 @@ const mockGptResponse = {
 };
 
 beforeAll(() => {
-  globalThis.fetch = jest.fn(() =>
+  globalThis.fetch = vi.fn(() =>
     Promise.resolve({
       ok: true,
       status: 200,
@@ -91,7 +92,7 @@ const seedCredentials = ({
 
 const originalError = console.error;
 beforeAll(() => {
-  jest.spyOn(console, 'error').mockImplementation((message, ...rest) => {
+  vi.spyOn(console, 'error').mockImplementation((message, ...rest) => {
     if (
       typeof message === 'string' &&
       message.includes('not wrapped in act')
@@ -181,8 +182,8 @@ describe('App integration', () => {
   });
 
   it('submits bookmark successfully and closes the window', async () => {
-    jest.useFakeTimers();
-    const closeSpy = jest.spyOn(window, 'close').mockImplementation(() => undefined);
+    vi.useFakeTimers();
+    const closeSpy = vi.spyOn(window, 'close').mockImplementation(() => undefined);
     mockPinboardApi();
     seedCredentials();
     window.history.pushState({}, '', '?url=https%3A%2F%2Ftesting.com%2F');
@@ -195,10 +196,10 @@ describe('App integration', () => {
 
     await waitFor(() => expect(store.getState().bookmark.status).toBe('success'));
     act(() => {
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
     });
     expect(closeSpy).toHaveBeenCalled();
-    jest.useRealTimers();
+    vi.useRealTimers();
     closeSpy.mockRestore();
   });
 
