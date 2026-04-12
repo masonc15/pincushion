@@ -20,7 +20,11 @@ export default defineConfig(({ command }) => ({
     environment: 'jsdom',
     setupFiles: ['./src/__testing__/setupTests.ts'],
     fakeTimers: {
-      // Match Jest's default: don't fake setTimeout that waitFor/act use for polling
+      // Match Jest's default: only fake timer-related globals, not microtasks.
+      // Without toFake, Vitest also fakes queueMicrotask/process.nextTick,
+      // which breaks @testing-library's waitFor polling. shouldAdvanceTime
+      // lets async gaps progress so waitFor can resolve.
+      toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'Date'],
       shouldAdvanceTime: true,
     },
     include: [
