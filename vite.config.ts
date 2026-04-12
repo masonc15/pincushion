@@ -11,6 +11,7 @@ export default defineConfig({
   base: '/pincushion/',
   build: {
     outDir: 'build',
+    sourcemap: true,
   },
   test: {
     globals: true,

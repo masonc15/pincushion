@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import TwitterCardPreview from '../TwitterCardPreview';
 
-const renderWithState = (state: any) => {
+const renderWithState = (state: unknown) => {
   const store = configureStore({
     reducer: {
       twitterCard: (s = state) => s,

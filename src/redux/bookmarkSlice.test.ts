@@ -4,7 +4,7 @@ import bookmarkReducer, {
 } from './bookmarkSlice';
 
 const createState = (): BookmarkState =>
-  bookmarkReducer(undefined, { type: 'bookmark/init' } as any);
+  bookmarkReducer(undefined, { type: 'bookmark/init' });
 
 describe('bookmarkSlice fetchBookmarkDetails concurrency guards', () => {
   it('ignores fulfilled payloads from stale request IDs', () => {
