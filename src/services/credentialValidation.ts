@@ -140,7 +140,7 @@ export async function verifyOpenAiToken(openAiToken: string): Promise<void> {
     10_000
   );
   try {
-    const response = await fetch('https://api.openai.com/v1/models/gpt-4o-mini', {
+    const response = await fetch('https://pincushion-openai-proxy.masonc789-34f.workers.dev/v1/models/gpt-5.4-mini', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${trimmedToken}`,

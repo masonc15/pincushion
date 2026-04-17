@@ -1,4 +1,4 @@
-const OPENAI_CHAT_COMPLETIONS_URL = 'https://api.openai.com/v1/chat/completions';
+const OPENAI_CHAT_COMPLETIONS_URL = 'https://pincushion-openai-proxy.masonc789-34f.workers.dev/v1/chat/completions';
 const OPENAI_CHAT_TIMEOUT_MS = 30_000;
 const OPENAI_RATE_LIMIT_RETRIES = 1;
 const OPENAI_RATE_LIMIT_DELAY_MS = 1_000;
