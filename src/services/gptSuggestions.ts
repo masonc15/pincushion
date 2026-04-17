@@ -108,7 +108,7 @@ const requestChatCompletion = async (
 export async function fetchGptTagSuggestions({
   token,
   context,
-  model = 'gpt-4o-mini',
+  model = 'gpt-5.4-mini',
   temperature = 0.4,
 }: FetchGptOptions): Promise<string[]> {
   if (!token) {
@@ -155,7 +155,7 @@ export async function filterRecentTagsForRelevance({
   token,
   recentTags,
   context,
-  model = 'gpt-4o-mini',
+  model = 'gpt-5.4-nano',
   temperature = 0.3,
 }: FilterRecentTagsOptions): Promise<string[]> {
   if (!token || recentTags.length === 0) {
