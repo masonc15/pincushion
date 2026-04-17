@@ -124,7 +124,7 @@ describe('bookmark slice', () => {
     // --- fetchBookmarkDetails ---
     describe('fetchBookmarkDetails', () => {
       const urlToFetch = 'http://example.com/fetch';
-      const expectedApiUrl = `https://eloquent-fenglisu-ae6d4c.netlify.app/.netlify/functions/pinboard-bridge/v1/posts/get?format=json&url=${encodeURIComponent(
+      const expectedApiUrl = `https://pincushion-openai-proxy.masonc789-34f.workers.dev/pinboard/v1/posts/get?format=json&url=${encodeURIComponent(
         urlToFetch
       )}`;
 
@@ -193,7 +193,7 @@ describe('bookmark slice', () => {
         mockedAxios.get.mockResolvedValueOnce({ data: { posts: [] } });
         await store.dispatch(fetchBookmarkDetails(overrideUrl));
         expect(mockedAxios.get).toHaveBeenCalledWith(
-          `https://eloquent-fenglisu-ae6d4c.netlify.app/.netlify/functions/pinboard-bridge/v1/posts/get?format=json&url=${encodeURIComponent(
+          `https://pincushion-openai-proxy.masonc789-34f.workers.dev/pinboard/v1/posts/get?format=json&url=${encodeURIComponent(
             overrideUrl
           )}`,
           expect.objectContaining({
@@ -270,7 +270,7 @@ describe('bookmark slice', () => {
           generic: null,
         });
         expect(mockedAxios.get).toHaveBeenCalledWith(
-          `https://eloquent-fenglisu-ae6d4c.netlify.app/.netlify/functions/pinboard-bridge/v1/posts/add?${expectedParams}`,
+          `https://pincushion-openai-proxy.masonc789-34f.workers.dev/pinboard/v1/posts/add?${expectedParams}`,
           expect.objectContaining({
             headers: { Authorization: 'Bearer testUser:testToken' },
           })

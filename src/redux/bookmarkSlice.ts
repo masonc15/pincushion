@@ -177,7 +177,7 @@ export const submitBookmark = createAsyncThunk<
 
   try {
     const response = await axios.get(
-      `https://eloquent-fenglisu-ae6d4c.netlify.app/.netlify/functions/pinboard-bridge/v1/posts/add?${params.toString()}`,
+      `https://pincushion-openai-proxy.masonc789-34f.workers.dev/pinboard/v1/posts/add?${params.toString()}`,
       {
         headers: {
           Authorization: `Bearer ${user}:${token}`,
@@ -225,7 +225,7 @@ export const fetchBookmarkDetails = createAsyncThunk<
     try {
       // Fetch details: strip fragment and encode URL parameter
       const response = await axios.get(
-        `https://eloquent-fenglisu-ae6d4c.netlify.app/.netlify/functions/pinboard-bridge/v1/posts/get?format=json&url=${cleanUrl(
+        `https://pincushion-openai-proxy.masonc789-34f.workers.dev/pinboard/v1/posts/get?format=json&url=${cleanUrl(
           targetUrl
         )}`,
         {

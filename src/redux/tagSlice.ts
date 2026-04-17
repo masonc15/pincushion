@@ -48,7 +48,7 @@ export const fetchTags = createAsyncThunk<
     } = getState();
     try {
       const response = await axios.get(
-        `https://eloquent-fenglisu-ae6d4c.netlify.app/.netlify/functions/pinboard-bridge/v1/tags/get?format=json`,
+        `https://pincushion-openai-proxy.masonc789-34f.workers.dev/pinboard/v1/tags/get?format=json`,
         {
           headers: {
             Authorization: `Bearer ${user}:${token}`,
@@ -111,7 +111,7 @@ export const fetchSuggestedTags = createAsyncThunk<
         );
       }
       const response = await axios.get(
-        `https://eloquent-fenglisu-ae6d4c.netlify.app/.netlify/functions/pinboard-bridge/posts/suggest-with-preview?format=json&url=${cleanUrl(
+        `https://pincushion-openai-proxy.masonc789-34f.workers.dev/pinboard/posts/suggest-with-preview?format=json&url=${cleanUrl(
           url
         )}`,
         {

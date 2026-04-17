@@ -92,7 +92,7 @@ const formatOpenAiValidationError = (error: unknown): string => {
 };
 
 const PINBOARD_BASE_URL =
-  'https://eloquent-fenglisu-ae6d4c.netlify.app/.netlify/functions/pinboard-bridge';
+  'https://pincushion-openai-proxy.masonc789-34f.workers.dev/pinboard';
 
 type PinboardCredentialInput = {
   username: string;
