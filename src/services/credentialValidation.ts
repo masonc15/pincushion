@@ -91,7 +91,8 @@ const formatOpenAiValidationError = (error: unknown): string => {
   return DEFAULT_OPENAI_ERROR;
 };
 
-const PINBOARD_BASE_URL = 'https://pinboard-api.herokuapp.com';
+const PINBOARD_BASE_URL =
+  'https://eloquent-fenglisu-ae6d4c.netlify.app/.netlify/functions/pinboard-bridge';
 
 type PinboardCredentialInput = {
   username: string;

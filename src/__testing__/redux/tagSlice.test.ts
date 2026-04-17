@@ -181,7 +181,7 @@ describe('tag slice', () => {
     describe('fetchTags', () => {
       const store = createMockStore();
       const expectedApiUrl =
-        'https://pinboard-api.herokuapp.com/v1/tags/get?format=json';
+        'https://eloquent-fenglisu-ae6d4c.netlify.app/.netlify/functions/pinboard-bridge/v1/tags/get?format=json';
 
       it('should handle fulfilled state and update localStorage', async () => {
         const mockTagData = { tagA: 5, tagB: 2 };
@@ -232,7 +232,7 @@ describe('tag slice', () => {
     describe('fetchSuggestedTags', () => {
       const bookmarkUrl = 'http://suggest.me';
       const store = createMockStore(initialState, { url: bookmarkUrl });
-      const expectedApiUrl = `https://pinboard-api.herokuapp.com/posts/suggest-with-preview?format=json&url=${bookmarkUrl}`;
+      const expectedApiUrl = `https://eloquent-fenglisu-ae6d4c.netlify.app/.netlify/functions/pinboard-bridge/posts/suggest-with-preview?format=json&url=${bookmarkUrl}`;
 
       it('should handle pending state', () => {
         mockedAxios.get.mockResolvedValueOnce({ data: { suggestions: {} } }); // Mock response needed
