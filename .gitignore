@@ -6,3 +6,7 @@ build/
 coverage/
 .licenses/
 .plan
+
+# Agent instruction files (never commit per personal convention)
+CLAUDE.md
+AGENTS.md
