@@ -37,7 +37,7 @@ type ChatCompletionMessage = {
 type ChatCompletionRequest = {
   model: string;
   messages: ChatCompletionMessage[];
-  max_tokens?: number;
+  max_completion_tokens?: number;
   temperature?: number;
 };
 
@@ -117,7 +117,7 @@ export async function fetchGptTagSuggestions({
 
   const completion = await requestChatCompletion(token, {
     model,
-    max_tokens: 250,
+    max_completion_tokens: 250,
     temperature,
     messages: [
       { role: 'system', content: BASE_SYSTEM_PROMPT },
@@ -169,7 +169,7 @@ export async function filterRecentTagsForRelevance({
 
   const completion = await requestChatCompletion(token, {
     model,
-    max_tokens: 150,
+    max_completion_tokens: 150,
     temperature,
     messages: [
       { role: 'system', content: RECENT_TAGS_FILTER_PROMPT },
