@@ -16,6 +16,7 @@ import { fetchGptTagSuggestions } from '../../services/gptSuggestions.ts';
 // Mock axios
 vi.mock('axios');
 const mockedAxios = axios;
+const expectedAuthHeader = `Basic ${btoa('testUser:testToken')}`;
 
 vi.mock('../../services/gptSuggestions', () => ({
   fetchGptTagSuggestions: vi.fn(),
@@ -195,7 +196,7 @@ describe('tag slice', () => {
         expect(mockedAxios.get).toHaveBeenCalledWith(
           expectedApiUrl,
           expect.objectContaining({
-            headers: { Authorization: 'Bearer testUser:testToken' },
+            headers: { Authorization: expectedAuthHeader },
           })
         );
 
@@ -225,6 +226,21 @@ describe('tag slice', () => {
         expect(state.tagCounts).toEqual({}); // Should not change tagCounts on error
         expect(state.error).toEqual(errorMessage);
         expect(localStorageMock.getItem('tags')).toBeNull(); // Should not update localStorage on error
+      });
+
+      it('does not fetch tags without credentials', async () => {
+        const noAuthStore = createMockStore(
+          initialState,
+          { url: 'http://example.com/suggest' },
+          { user: '', token: '', openAiToken: '' }
+        );
+
+        await noAuthStore.dispatch(fetchTags());
+
+        expect(mockedAxios.get).not.toHaveBeenCalled();
+        expect(noAuthStore.getState().tags.error).toEqual(
+          'Pinboard credentials are required.'
+        );
       });
     });
 
@@ -274,10 +290,25 @@ describe('tag slice', () => {
         expect(mockedAxios.get).toHaveBeenCalledWith(
           expectedApiUrl,
           expect.objectContaining({
-            headers: { Authorization: 'Bearer testUser:testToken' },
+            headers: { Authorization: expectedAuthHeader },
           })
         );
         expect(cleanUrl).toHaveBeenCalledWith(bookmarkUrl);
+      });
+
+      it('does not fetch suggestions without credentials', async () => {
+        const noAuthStore = createMockStore(
+          initialState,
+          { url: bookmarkUrl },
+          { user: '', token: '', openAiToken: '' }
+        );
+
+        await noAuthStore.dispatch(fetchSuggestedTags());
+
+        expect(mockedAxios.get).not.toHaveBeenCalled();
+        expect(noAuthStore.getState().tags.error).toEqual(
+          'Pinboard credentials are required.'
+        );
       });
 
       it('should handle fulfilled state with only one type of tag', async () => {

@@ -6,6 +6,10 @@ import {
 import axios from 'axios';
 import { cleanUrl } from '../utils/url';
 import {
+  buildPinboardAuthHeader,
+  PINBOARD_CREDENTIALS_REQUIRED,
+} from '../utils/pinboardAuth';
+import {
   fetchGptTagSuggestions,
   filterRecentTagsForRelevance,
 } from '../services/gptSuggestions';
@@ -46,12 +50,16 @@ export const fetchTags = createAsyncThunk<
     const {
       auth: { user, token },
     } = getState();
+    const authorization = buildPinboardAuthHeader(user, token);
+    if (!authorization) {
+      return rejectWithValue(PINBOARD_CREDENTIALS_REQUIRED);
+    }
     try {
       const response = await axios.get(
         `https://pincushion-openai-proxy.masonc789-34f.workers.dev/pinboard/v1/tags/get?format=json`,
         {
           headers: {
-            Authorization: `Bearer ${user}:${token}`,
+            Authorization: authorization,
           },
         }
       );
@@ -96,6 +104,10 @@ export const fetchSuggestedTags = createAsyncThunk<
       },
       tags: { tagCounts },
     } = getState();
+    const authorization = buildPinboardAuthHeader(user, token);
+    if (!authorization) {
+      return rejectWithValue(PINBOARD_CREDENTIALS_REQUIRED);
+    }
     try {
       const trimmedUrl = typeof url === 'string' ? url.trim() : '';
       if (trimmedUrl) {
@@ -116,7 +128,7 @@ export const fetchSuggestedTags = createAsyncThunk<
         )}`,
         {
           headers: {
-            Authorization: `Bearer ${user}:${token}`,
+            Authorization: authorization,
           },
         }
       );

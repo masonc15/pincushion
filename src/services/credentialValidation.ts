@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { buildPinboardAuthHeader } from '../utils/pinboardAuth';
 
 type ErrorWithStatus = Error & { status?: number };
 
@@ -109,12 +110,12 @@ export async function verifyPinboardCredentials({
     throw new Error('Pinboard username and token are required.');
   }
   const url = `${PINBOARD_BASE_URL}/v1/tags/get?format=json`;
-  const authHeader = `Bearer ${trimmedUser}:${trimmedToken}`;
+  const authHeader = buildPinboardAuthHeader(trimmedUser, trimmedToken);
   try {
     await axios.get(url, {
       timeout: 8000,
       headers: {
-        Authorization: authHeader,
+        Authorization: authHeader || '',
       },
     });
   } catch (error) {

@@ -5,6 +5,10 @@ import {
 } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { cleanUrl } from '../utils/url';
+import {
+  buildPinboardAuthHeader,
+  PINBOARD_CREDENTIALS_REQUIRED,
+} from '../utils/pinboardAuth';
 import type { AuthState } from './authSlice';
 
 export type BookmarkFormData = {
@@ -166,6 +170,11 @@ export const submitBookmark = createAsyncThunk<
   }
   // --- End client-side validation ---
 
+  const authorization = buildPinboardAuthHeader(user, token);
+  if (!authorization) {
+    return rejectWithValue({ genericError: PINBOARD_CREDENTIALS_REQUIRED });
+  }
+
   const params = new URLSearchParams();
   params.append('format', 'json');
   params.append('url', formData.url);
@@ -180,7 +189,7 @@ export const submitBookmark = createAsyncThunk<
       `https://pincushion-openai-proxy.masonc789-34f.workers.dev/pinboard/v1/posts/add?${params.toString()}`,
       {
         headers: {
-          Authorization: `Bearer ${user}:${token}`,
+          Authorization: authorization,
         },
       }
     );
@@ -222,6 +231,8 @@ export const fetchBookmarkDetails = createAsyncThunk<
     } = getState();
     const targetUrl = overrideUrl || url;
     if (!user || !token || !targetUrl) return null;
+    const authorization = buildPinboardAuthHeader(user, token);
+    if (!authorization) return null;
     try {
       // Fetch details: strip fragment and encode URL parameter
       const response = await axios.get(
@@ -230,7 +241,7 @@ export const fetchBookmarkDetails = createAsyncThunk<
         )}`,
         {
           headers: {
-            Authorization: `Bearer ${user}:${token}`,
+            Authorization: authorization,
           },
         }
       );

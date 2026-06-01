@@ -11,6 +11,7 @@ import { configureStore } from '@reduxjs/toolkit'; // Needed for thunk testing
 // Mock axios
 vi.mock('axios');
 const mockedAxios = axios;
+const expectedAuthHeader = `Basic ${btoa('testUser:testToken')}`;
 
 // Define initialState BEFORE createMockStore uses it
 const initialState = {
@@ -167,7 +168,7 @@ describe('bookmark slice', () => {
         expect(mockedAxios.get).toHaveBeenCalledWith(
           expectedApiUrl,
           expect.objectContaining({
-            headers: { Authorization: 'Bearer testUser:testToken' },
+            headers: { Authorization: expectedAuthHeader },
           })
         );
       });
@@ -183,7 +184,7 @@ describe('bookmark slice', () => {
         expect(mockedAxios.get).toHaveBeenCalledWith(
           expectedApiUrl,
           expect.objectContaining({
-            headers: { Authorization: 'Bearer testUser:testToken' },
+            headers: { Authorization: expectedAuthHeader },
           })
         );
       });
@@ -197,7 +198,7 @@ describe('bookmark slice', () => {
             overrideUrl
           )}`,
           expect.objectContaining({
-            headers: { Authorization: 'Bearer testUser:testToken' },
+            headers: { Authorization: expectedAuthHeader },
           })
         );
       });
@@ -272,8 +273,28 @@ describe('bookmark slice', () => {
         expect(mockedAxios.get).toHaveBeenCalledWith(
           `https://pincushion-openai-proxy.masonc789-34f.workers.dev/pinboard/v1/posts/add?${expectedParams}`,
           expect.objectContaining({
-            headers: { Authorization: 'Bearer testUser:testToken' },
+            headers: { Authorization: expectedAuthHeader },
           })
+        );
+      });
+
+      it('does not submit without credentials', async () => {
+        const testStore = configureStore({
+          reducer: {
+            auth: (state = { user: '', token: '' }) => state,
+            bookmark: bookmarkReducer,
+          },
+          preloadedState: {
+            bookmark: { ...initialState, formData: validFormData },
+            auth: { user: '', token: '' },
+          },
+        });
+
+        await testStore.dispatch(submitBookmark());
+
+        expect(mockedAxios.get).not.toHaveBeenCalled();
+        expect(testStore.getState().bookmark.errors.generic).toEqual(
+          'Pinboard credentials are required.'
         );
       });
 

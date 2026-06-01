@@ -1,5 +1,35 @@
 import { vi } from 'vitest';
-import { verifyOpenAiToken } from '../credentialValidation';
+import axios from 'axios';
+import {
+  verifyOpenAiToken,
+  verifyPinboardCredentials,
+} from '../credentialValidation';
+
+vi.mock('axios');
+const mockedAxios = axios;
+
+describe('verifyPinboardCredentials', () => {
+  beforeEach(() => {
+    mockedAxios.get.mockReset();
+  });
+
+  it('validates with basic auth', async () => {
+    mockedAxios.get.mockResolvedValueOnce({ data: {} });
+
+    await expect(
+      verifyPinboardCredentials({ username: ' testUser ', token: ' testToken ' })
+    ).resolves.toBeUndefined();
+
+    expect(mockedAxios.get).toHaveBeenCalledWith(
+      'https://pincushion-openai-proxy.masonc789-34f.workers.dev/pinboard/v1/tags/get?format=json',
+      expect.objectContaining({
+        headers: {
+          Authorization: `Basic ${btoa('testUser:testToken')}`,
+        },
+      })
+    );
+  });
+});
 
 describe('verifyOpenAiToken', () => {
   const originalFetch = globalThis.fetch;
