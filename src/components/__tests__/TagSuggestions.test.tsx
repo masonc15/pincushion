@@ -52,6 +52,22 @@ describe('TagSuggestions (presentational)', () => {
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
+  test('shows a non-blocking notice when Pinboard suggestions are unavailable', () => {
+    render(
+      <TagSuggestions
+        {...baseProps}
+        isEmpty
+        suggestions={[]}
+        notice="Pinboard couldn't suggest tags for this page. You can still add tags manually."
+      />
+    );
+
+    expect(
+      screen.getByText(/pinboard couldn't suggest tags for this page/i)
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
   test('fires onSuggestionClick when tag clicked and does not submit form', async () => {
     render(<TagSuggestions {...baseProps} />);
     const button = screen.getByText('tag1');

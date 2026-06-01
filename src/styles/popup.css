@@ -510,6 +510,9 @@ input#url.hash-detected {
 .tag-suggestions #tagspinner {
   margin-right: 0.3em;
 }
+.tag-suggestions--notice {
+  color: var(--pincushion-text-muted);
+}
 .tag-spinner-enter {
   opacity: 0;
   max-height: 0;

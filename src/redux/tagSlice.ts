@@ -29,6 +29,7 @@ export type TagState = {
   gptError: string | null;
   gptContextKey: string | null;
   error: string | null;
+  suggestionNotice: string | null;
   recentTags: string[];
   filteredRecentTags: string[];
 };
@@ -83,6 +84,7 @@ export const fetchTags = createAsyncThunk<
 
 type SuggestPreviewPayload = {
   suggestions: string[];
+  suggestionNotice: string | null;
   preview: TwitterCardData | null;
   previewError: string | null;
   targetUrl: string | null;
@@ -143,6 +145,11 @@ export const fetchSuggestedTags = createAsyncThunk<
         .map((tag: string) => (typeof tag === 'string' ? tag.trim() : ''))
         .filter(Boolean);
       const processed = postProcessPinboardSuggestions(combined, tagCounts);
+      const suggestionNotice =
+        response.data?.suggestionsStatus === 'unavailable' &&
+        response.data?.suggestionsError?.source === 'pinboard'
+          ? "Pinboard couldn't suggest tags for this page. You can still add tags manually."
+          : null;
       const previewRaw = response.data?.preview;
       const preview: TwitterCardData | null =
         previewRaw && typeof previewRaw === 'object'
@@ -214,6 +221,7 @@ export const fetchSuggestedTags = createAsyncThunk<
       );
       return {
         suggestions: processed,
+        suggestionNotice,
         preview,
         previewError,
         targetUrl: trimmedUrl || null,
@@ -341,6 +349,7 @@ const initialState: TagState = {
   gptError: null,
   gptContextKey: null,
   error: null,
+  suggestionNotice: null,
   recentTags: [],
   filteredRecentTags: [],
 };
@@ -437,17 +446,20 @@ const tagSlice = createSlice({
         state.suggestedLoading = true; // Ensure this is set
         state.suggestedStatus = 'loading';
         state.error = null;
+        state.suggestionNotice = null;
       })
       .addCase(fetchSuggestedTags.fulfilled, (state, action) => {
         state.suggestedLoading = false;
         state.suggested = action.payload.suggestions;
         state.suggestedStatus = 'succeeded';
         state.error = null; // Reset error on success
+        state.suggestionNotice = action.payload.suggestionNotice ?? null;
       })
       .addCase(fetchSuggestedTags.rejected, (state, action) => {
         state.suggestedLoading = false;
         state.suggestedStatus = 'failed';
         state.error = (action.payload as string) || action.error.message || null;
+        state.suggestionNotice = null;
       })
       .addCase(fetchGptSuggestions.pending, (state, action) => {
         state.gptStatus = 'loading';

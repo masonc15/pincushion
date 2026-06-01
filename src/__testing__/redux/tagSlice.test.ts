@@ -82,6 +82,7 @@ describe('tag slice', () => {
     gptError: null,
     gptContextKey: null,
     error: null,
+    suggestionNotice: null,
     recentTags: [],
     filteredRecentTags: [],
   };
@@ -337,6 +338,30 @@ describe('tag slice', () => {
         expect(state.suggestedLoading).toBe(false);
         expect(state.suggestedStatus).toBe('succeeded');
         expect(state.suggested).toEqual([]);
+      });
+
+      it('stores a notice when Pinboard suggestions are unavailable', async () => {
+        mockedAxios.get.mockResolvedValueOnce({
+          data: {
+            suggestions: {},
+            suggestionsStatus: 'unavailable',
+            suggestionsError: {
+              source: 'pinboard',
+              status: 500,
+            },
+          },
+        });
+
+        await store.dispatch(fetchSuggestedTags());
+        const state = store.getState().tags;
+
+        expect(state.suggestedLoading).toBe(false);
+        expect(state.suggestedStatus).toBe('succeeded');
+        expect(state.suggested).toEqual([]);
+        expect(state.suggestionNotice).toEqual(
+          "Pinboard couldn't suggest tags for this page. You can still add tags manually."
+        );
+        expect(state.error).toBeNull();
       });
 
       it('should handle rejected state', async () => {

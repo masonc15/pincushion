@@ -53,6 +53,9 @@ function BookmarkForm() {
   const suggestionsEmpty = useSelector((state: RootState) =>
     selectIsSuggestionsEmpty(state)
   );
+  const suggestionNotice = useSelector(
+    (state: RootState) => state.tags.suggestionNotice
+  );
 
   const btnRef = useRef<HTMLButtonElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -421,6 +424,7 @@ function BookmarkForm() {
         suggestions={suggestions}
         isLoading={spinnerVisible}
         isEmpty={suggestionsEmpty}
+        notice={suggestionNotice}
         onSuggestionClick={handleAddSuggestion}
       />
     </form>

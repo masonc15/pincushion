@@ -12,6 +12,7 @@ const baseTagsState = {
   gptStatus: 'idle',
   gptError: null,
   gptContextKey: null,
+  suggestionNotice: null,
   recentTags: [],
   filteredRecentTags: [],
 };

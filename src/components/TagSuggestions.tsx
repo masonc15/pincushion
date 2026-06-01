@@ -5,6 +5,7 @@ interface TagSuggestionsProps {
   suggestions: string[];
   isLoading?: boolean;
   isEmpty?: boolean;
+  notice?: string | null;
   onSuggestionClick?: (tag: string) => void;
 }
 
@@ -12,6 +13,7 @@ const TagSuggestions: React.FC<TagSuggestionsProps> = ({
   suggestions,
   isLoading = false,
   isEmpty = false,
+  notice = null,
   onSuggestionClick,
 }) => {
   const spinnerRef = useRef<HTMLDivElement | null>(null);
@@ -74,6 +76,11 @@ const TagSuggestions: React.FC<TagSuggestionsProps> = ({
             );
           })}
         </TransitionGroup>
+      )}
+      {notice && (
+        <div className="tag-suggestions tag-suggestions--notice" role="status">
+          {notice}
+        </div>
       )}
       <CSSTransition
         in={isLoading}
